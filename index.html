@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro - Caçador SC Lixo Inteligente</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Registro - Caçador SC</h1>
+      <p>Participe do projeto de lixos inteligentes e ganhe pontos para usar em mercados e muito mais!</p>
+    </header>
+
+    <div class="image-ecological">
+      <img src="https://site.otimizy.com.br/wp-content/uploads/2021/06/praticas-sustentaveis.png" width="650" height="500" ="Árvore" />
+    </div>
+
+    <form id="registroForm">
+      <label for="nome">Nome Completo</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="numero">Número de Telefone</label>
+      <input type="tel" id="numero" name="numero" pattern="[0-9]{10,11}" placeholder="Ex: 48999999999" required />
+
+      <label for="cpf">CPF</label>
+      <input type="text" id="cpf" name="cpf" pattern="\d{11}" placeholder="Somente números" required />
+
+      <button type="submit">Registrar</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('registroForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Aqui pode-se adicionar validação extra se quiser
+
+      // Redireciona para a página de sucesso
+      window.location.href = 'success.html';
+    });
+  </script>
+</body>
+</html>
