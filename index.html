@@ -1,45 +1,153 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Registro - Caçador SC Lixo Inteligente</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Registro - Caçador SC</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #e8f5e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  .container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+  }
+  h1 {
+    color: #2e7d32;
+    margin-bottom: 12px;
+  }
+  p {
+    color: #555;
+    margin-bottom: 24px;
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  input {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    border: 2px solid #a5d6a7;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  input:focus {
+    border-color: #388e3c;
+    outline: none;
+  }
+  button {
+    width: 100%;
+    padding: 14px 0;
+    background: #4caf50;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background: #388e3c;
+  }
+  .error {
+    background: #ffcdd2;
+    color: #b71c1c;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    display: none;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Registro - Caçador SC</h1>
-      <p>Participe do projeto de lixos inteligentes e ganhe pontos para usar em mercados e muito mais!</p>
-    </header>
+  <main class="container">
+    <h1>🌿 Registro - Lixos Inteligentes Caçador-SC</h1>
+    <p>Descarte corretamente e ganhe pontos para mercados e mais!</p>
 
-    <div class="image-ecological">
-      <img src="https://site.otimizy.com.br/wp-content/uploads/2021/06/praticas-sustentaveis.png" width="650" height="500" ="Árvore" />
-    </div>
+    <div id="errorMsg" class="error"></div>
 
-    <form id="registroForm">
+    <form id="formRegistro" novalidate>
       <label for="nome">Nome Completo</label>
-      <input type="text" id="nome" name="nome" required />
+      <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required />
 
       <label for="numero">Número de Telefone</label>
-      <input type="tel" id="numero" name="numero" pattern="[0-9]{10,11}" placeholder="Ex: 48999999999" required />
+      <input type="tel" id="numero" name="numero" placeholder="(48) 99999-9999" pattern="\d{10,11}" required />
 
       <label for="cpf">CPF</label>
-      <input type="text" id="cpf" name="cpf" pattern="\d{11}" placeholder="Somente números" required />
+      <input type="text" id="cpf" name="cpf" placeholder="Somente números" pattern="\d{11}" required />
 
       <button type="submit">Registrar</button>
     </form>
-  </div>
+  </main>
 
   <script>
-    document.getElementById('registroForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+    const form = document.getElementById('formRegistro');
+    const errorDiv = document.getElementById('errorMsg');
 
-      // Aqui pode-se adicionar validação extra se quiser
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorDiv.style.display = 'none';
+      errorDiv.textContent = '';
 
-      // Redireciona para a página de sucesso
-      window.location.href = 'success.html';
+      const nome = form.nome.value.trim();
+      const numero = form.numero.value.trim();
+      const cpf = form.cpf.value.trim();
+
+      // Validações básicas
+      const cpfRegex = /^\d{11}$/;
+      const numeroRegex = /^\d{10,11}$/;
+
+      if (!nome) {
+        showError('Por favor, preencha o nome.');
+        return;
+      }
+      if (!numeroRegex.test(numero)) {
+        showError('Número de telefone inválido. Use apenas números, 10 ou 11 dígitos.');
+        return;
+      }
+      if (!cpfRegex.test(cpf)) {
+        showError('CPF inválido. Deve conter exatamente 11 números.');
+        return;
+      }
+
+      // Checa se o CPF já está registrado
+      const registros = JSON.parse(localStorage.getItem('registros')) || [];
+      const cpfExistente = registros.some(registro => registro.cpf === cpf);
+
+      if (cpfExistente) {
+        showError('Este CPF já está cadastrado!');
+        return;
+      }
+
+      // Salva novo registro
+      registros.push({ nome, numero, cpf });
+      localStorage.setItem('registros', JSON.stringify(registros));
+
+      // Redireciona para página de sucesso
+      window.location.href = 'sucess.html';
     });
+
+    function showError(msg) {
+      errorDiv.textContent = msg;
+      errorDiv.style.display = 'block';
+    }
   </script>
 </body>
 </html>
